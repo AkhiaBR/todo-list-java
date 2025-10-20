@@ -5,5 +5,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IUserRepository extends JpaRepository<UserModel, UUID> { // define pra interface JpaRepository a entidade (userModel) e o tipo de chave primária (UUID)
-    
+
+    UserModel findByUsername(String username); // encontra o usuário pelo nome
+
 }
