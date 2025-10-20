@@ -1,10 +1,10 @@
-package com.springjava.todo;
+package com.akhiastudios.todolist;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TodoApplicationTests {
+class GerenciadorDeTarefasApplicationTests {
 
 	@Test
 	void contextLoads() {
