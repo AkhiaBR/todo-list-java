@@ -52,6 +52,7 @@ public class FilterTaskAuth extends OncePerRequestFilter {
                         var passwordVerify = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword()); // compara a senha do usuário e a senha recebida
                         
                         if (passwordVerify.verified == true) { // se a senha for validada, o filtro é passado para a próxima camada
+                            request.setAttribute("idUser", user.getId()); // injeta o id do usuário na request
                             filterChain.doFilter(request, response);
                         } else {
                             response.sendError(401, "Usuário sem autorização/não existe");
