@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.akhiastudios.todolist.utils.Utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -51,4 +55,11 @@ public class TaskController {
         return tasks;
     }
 
+    @PutMapping("/{id}") // id da task a ser alterada
+    public TaskModel update (@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) { // @PathVariable = endpoint é uma variavel, nesse caso, o endpoint é o id da task
+        var task = this.taskRepository.findById(id).orElse(null);
+        taskModel.setId(null);
+        Utils.copyNonNullProperties(taskModel, task); // faz somente uma alteracao, mesclando os campos
+        return this.taskRepository.save(task);
+    }
 }
