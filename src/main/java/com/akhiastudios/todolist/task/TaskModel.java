@@ -31,4 +31,12 @@ public class TaskModel {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    public void setTitle(String title) throws Exception { // throws Exception -> repassa a excessao pra camada que chamou o setTitle, se nao tivesse throws Exception nesse metodo, ele deveria ser tratado aqui
+        if (title.length() > 50) {
+            throw new Exception("O campo title deve conter no máximo 50 caracteres");
+        }
+
+        this.title = title;
+    }
+
 }
