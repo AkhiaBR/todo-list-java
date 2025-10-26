@@ -56,10 +56,24 @@ public class TaskController {
     }
 
     @PutMapping("/{id}") // id da task a ser alterada
-    public TaskModel update (@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) { // @PathVariable = endpoint é uma variavel, nesse caso, o endpoint é o id da task
+    public ResponseEntity update (@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) { // @PathVariable = endpoint é uma variavel, nesse caso, o endpoint é o id da task
         var task = this.taskRepository.findById(id).orElse(null);
-        taskModel.setId(null);
-        Utils.copyNonNullProperties(taskModel, task); // faz somente uma alteracao, mesclando os campos
-        return this.taskRepository.save(task);
+
+        if (task == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Tarefa não encontrada.");
+        }
+
+        var idUser = request.getAttribute("idUser");
+        
+        if (!task.getIdUser().equals(idUser)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Usuário não tem permissão para alterar essa tarefa.");
+        }
+
+        Utils.copyNonNullProperties(taskModel, task, "id", "idUser"); // faz somente uma alteracao, mesclando os campos
+        
+        var taskUpdated = this.taskRepository.save(task);
+        return ResponseEntity.ok().body(taskUpdated);
     }
 }
